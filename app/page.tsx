@@ -63,7 +63,7 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8 flex-1 flex flex-col">
         <header className="mb-8 border-b border-[#333] pb-4">
           <h1 className="text-2xl md:text-4xl font-bold tracking-tighter relative inline-block">
-            <span className="relative z-10">EVENTO_HACKATHON</span>
+            <span className="relative z-10">CODING_HOUSE</span>
             <span className="absolute -bottom-1 left-0 h-1 w-1/2 bg-[#0ff] blur-sm"></span>
           </h1>
         </header>
