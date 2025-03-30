@@ -6,6 +6,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
+  console.log(body);
   const githubEvent = request.headers.get("x-github-event");
 
   if (githubEvent === "push") {
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
       commit_url: body.head_commit.url,
       branch: body.ref,
     };
-    console.log(response);
+    // console.log(response);
     return NextResponse.json(response, { status: 201 });
   } else if (githubEvent === "ping") {
     console.log("GitHub sent the ping event");
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
 
 /*
 PORT FORWARDING CON SMEE.IO, REGISTRADO EN EL Payload URL DE GITHUB
+        npm install --global smee-client
 run : smee -u https://smee.io/kD9SZP8FfXp3hVX4 -t http://127.0.0.1:3000/api/commits
 
 author body.head_commit.commiter.username
