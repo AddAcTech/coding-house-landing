@@ -1,62 +1,18 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import CountdownTimer from "@/components/countdown-timer";
 import CommitNotifications from "@/components/commit-notifications";
-import { fetchGithubCommits } from "@/lib/github";
 import type { Commit } from "@/types/github";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 
-export default function Home() {
-  const [commits, setCommits] = useState<Commit[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function Home() {
+  const cookieStore = await cookies();
+  const supabase = createClient(cookieStore);
 
-  // Fecha de finalización del evento (una semana desde ahora)
+  const { data: commits, error } = await supabase
+    .from("commits")
+    .select("commit");
   const endDate = new Date();
   endDate.setDate(endDate.getDate() + 7);
-
-  useEffect(() => {
-    const loadInitialCommits = async () => {
-      try {
-        const initialCommits = await fetchGithubCommits();
-        setCommits(initialCommits);
-      } catch (error) {
-        console.error("Error fetching commits:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadInitialCommits();
-
-    // Polling para nuevos commits cada 30 segundos
-    const interval = setInterval(async () => {
-      try {
-        const newCommits = await fetchGithubCommits();
-        setCommits((prev) => {
-          // Filtrar commits que ya tenemos
-          const existingIds = new Set(prev.map((commit) => commit.id));
-          const uniqueNewCommits = newCommits.filter(
-            (commit) => !existingIds.has(commit.id)
-          );
-
-          if (uniqueNewCommits.length > 0) {
-            // Añadir animación de entrada a los nuevos commits
-            const animatedNewCommits = uniqueNewCommits.map((commit) => ({
-              ...commit,
-              isNew: true,
-            }));
-            return [...animatedNewCommits, ...prev];
-          }
-
-          return prev;
-        });
-      } catch (error) {
-        console.error("Error polling commits:", error);
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-[#e0e0e0] font-mono flex flex-col">
@@ -85,7 +41,12 @@ export default function Home() {
             </h2>
             <div className="bg-[#111] border border-[#333] rounded-md p-6 shadow-lg relative overflow-hidden flex-1">
               <div className="absolute inset-0 bg-gradient-to-br from-[#f0f]/5 to-transparent pointer-events-none"></div>
-              <CommitNotifications commits={commits} loading={loading} />
+              <CommitNotifications
+                commits={
+                  (commits?.map(({ commit }) => commit) as Commit[]) || []
+                }
+                loading={false}
+              />
             </div>
           </section>
         </div>

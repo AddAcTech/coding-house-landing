@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 
 export async function GET() {
   return NextResponse.json({ message: "Hello, Next.js!" });
 }
 
 export async function POST(request: Request) {
+  const cookieStore = await cookies();
+
+  const supabase = createClient(cookieStore);
   const body = await request.json();
   const githubEvent = request.headers.get("x-github-event");
 
@@ -21,6 +26,19 @@ export async function POST(request: Request) {
       branch: body.ref,
     };
     console.log(response);
+    const { error } = await supabase
+      .from("commits")
+      .insert({ commit: response });
+
+    if (error) {
+      console.error("Error inserting data:", error);
+      return NextResponse.json(
+        { error: "Error inserting data" },
+        { status: 500 }
+      );
+    }
+    // POST request to /api/commits
+
     return NextResponse.json(response, { status: 201 });
   } else if (githubEvent === "ping") {
     console.log("GitHub sent the ping event");

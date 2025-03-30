@@ -61,19 +61,17 @@ export default function CommitNotifications({
         <div
           key={commit.id}
           className="commit-item border border-[#333] bg-[#0a0a0a]/80 rounded-md p-3 transition-all duration-300 hover:border-[#f0f]/50 relative overflow-hidden font-mono"
-          data-new={commit.isNew ? "true" : "false"}
+          // data-new={commit.isNew ? "true" : "false"}
         >
-          {/* Efecto de brillo para nuevos commits */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#f0f]/20 to-transparent opacity-0 commit-glow"></div>
 
-          {/* Terminal header */}
           <div className="flex items-center justify-between mb-2 text-xs text-[#666] border-b border-[#333] pb-1">
             <div className="flex items-center">
               <span className="text-[#0ff] mr-1">$</span>
               <span>git_commit_info</span>
             </div>
             <div className="flex items-center gap-1">
-              <span>{formatTimeAgo(new Date(commit.commit.author.date))}</span>
+              <span>{formatTimeAgo(new Date(commit.date))}</span>
               <span className="px-1.5 py-0.5 rounded bg-[#222] text-[#f0f] ml-1">
                 {commit.branch || "main"}
               </span>
@@ -92,12 +90,10 @@ export default function CommitNotifications({
                 <br />
                 <span className="pl-4">
                   <span className="text-[#0ff]">"login"</span>:{" "}
-                  <span className="text-[#0f0]">"{commit.author.login}"</span>,
+                  <span className="text-[#0f0]">"{commit.author}"</span>,
                   <br />
                   <span className="text-[#0ff]">"avatar"</span>:{" "}
-                  <span className="text-[#0f0]">
-                    "{commit.author.avatar_url}"
-                  </span>
+                  <span className="text-[#0f0]">"{commit.avatar}"</span>
                   <br />
                 </span>
                 {`}`},
@@ -106,13 +102,11 @@ export default function CommitNotifications({
                 <br />
                 <span className="pl-4">
                   <span className="text-[#0ff]">"message"</span>:{" "}
-                  <span className="text-[#0f0]">"{commit.commit.message}"</span>
+                  <span className="text-[#0f0]">"{commit.commit_message}"</span>
                   ,
                   <br />
                   <span className="text-[#0ff]">"date"</span>:{" "}
-                  <span className="text-[#ff0]">
-                    "{commit.commit.author.date}"
-                  </span>
+                  <span className="text-[#ff0]">"{commit.date}"</span>
                   <br />
                 </span>
                 {`}`},
@@ -125,19 +119,15 @@ export default function CommitNotifications({
             </code>
           </div>
 
-          {/* Avatar as a small badge */}
-          {/* <div className="absolute top-3 right-3">
+          <div className="absolute top-3 right-3">
             <img
-              src={
-                commit.author.avatar_url ||
-                "/placeholder.svg?height=150&width=150"
-              }
-              alt={commit.author.login}
+              src={commit.avatar || "/placeholder.svg?height=150&width=150"}
+              alt={commit.author}
               className="w-8 h-8 rounded-md border border-[#333] object-cover shadow-lg"
               width={32}
               height={32}
             />
-          </div> */}
+          </div>
         </div>
       ))}
     </div>
