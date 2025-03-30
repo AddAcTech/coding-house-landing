@@ -6,7 +6,6 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
-  console.log(body);
   const githubEvent = request.headers.get("x-github-event");
 
   if (githubEvent === "push") {
@@ -21,7 +20,7 @@ export async function POST(request: Request) {
       commit_url: body.head_commit.url,
       branch: body.ref,
     };
-    // console.log(response);
+    console.log(response);
     return NextResponse.json(response, { status: 201 });
   } else if (githubEvent === "ping") {
     console.log("GitHub sent the ping event");
