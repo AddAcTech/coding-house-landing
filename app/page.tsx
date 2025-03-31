@@ -8,10 +8,13 @@ export default async function Home() {
   const cookieStore = await cookies();
   const supabase = createClient(cookieStore);
 
-  const { data: commits, error } = await supabase
+  const { data: commits } = await supabase
     .from("commits")
-    .select("commit");
-  const endDate = new Date();
+    .select("commit")
+    .order("time_stamps", { ascending: false });
+  const endDate = new Date("2025-04-20T03:58:52.552Z");
+
+  console.log(endDate);
   endDate.setDate(endDate.getDate() + 7);
 
   return (
@@ -27,7 +30,7 @@ export default async function Home() {
         <div className="flex flex-col gap-4">
           <section className="flex flex-col sticky">
             <h2 className="text-xl mb-4 text-[#0ff] tracking-wider">
-              TIEMPO RESTANTE
+              EL RETO COMIENZA EN:
             </h2>
             <div className="bg-[#111] border border-[#333] rounded-md p-6 shadow-lg relative overflow-hidden flex-1">
               <div className="absolute inset-0 bg-gradient-to-br from-[#0ff]/5 to-transparent pointer-events-none"></div>
