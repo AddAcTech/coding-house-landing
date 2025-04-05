@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import type { Commit } from "@/types/github";
-import { formatTimeAgo } from "@/lib/time-utils";
+import { TimeAgo } from "./TimeAgo";
+import { supabaseRealtime } from "@/lib/supabase-realtime"; // importa el cliente ligero
 
 interface CommitNotificationsProps {
   commits: Commit[];
@@ -10,26 +11,51 @@ interface CommitNotificationsProps {
 }
 
 export default function CommitNotifications({
-  commits,
+  commits: initialCommits,
   loading,
 }: CommitNotificationsProps) {
   const listRef = useRef<HTMLDivElement>(null);
+  const [commits, setCommits] = useState<Commit[]>(initialCommits);
 
   // Efecto para animar nuevos commits
   useEffect(() => {
     if (commits.length > 0 && listRef.current) {
+      console.log(commits)
       const newCommitElements = listRef.current.querySelectorAll(
         '.commit-item[data-new="true"]'
       );
 
       newCommitElements.forEach((element) => {
-        // Eliminar la marca de nuevo después de la animación
         setTimeout(() => {
           element.setAttribute("data-new", "false");
         }, 1000);
       });
     }
   }, [commits]);
+
+  // Suscripción a nuevos commits
+  useEffect(() => {
+    const channel = supabaseRealtime
+      .channel("commits-realtime")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "commits",
+        },
+        (payload) => {
+          const newCommit = payload.new as Commit;
+          console.log(newCommit)
+          setCommits((prev) => [{ ...newCommit.commit, isNew: true }, ...prev]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -71,7 +97,7 @@ export default function CommitNotifications({
               <span>git_commit_info</span>
             </div>
             <div className="flex items-center gap-1">
-              <span>{formatTimeAgo(new Date(commit.date))}</span>
+              <TimeAgo date={new Date(commit.date)} />
               <span className="px-1.5 py-0.5 rounded bg-[#222] text-[#f0f] ml-1">
                 {commit.branch || "main"}
               </span>
