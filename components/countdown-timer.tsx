@@ -40,10 +40,10 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full">
       <div className="grid grid-cols-4 gap-4 w-full max-w-2xl">
-        <TimeUnit value={timeLeft.days} label="DÍAS" />
-        <TimeUnit value={timeLeft.hours} label="HORAS" />
-        <TimeUnit value={timeLeft.minutes} label="MIN" />
-        <TimeUnit value={timeLeft.seconds} label="SEG" />
+        <TimeUnit value={timeLeft.days} label="DAYS" />
+        <TimeUnit value={timeLeft.hours} label="HOURS" />
+        <TimeUnit value={timeLeft.minutes} label="MINUTES" />
+        <TimeUnit value={timeLeft.seconds} label="SEC" />
       </div>
     </div>
   )
