@@ -12,10 +12,10 @@ export default async function Home() {
     .from("commits")
     .select("commit")
     .order("time_stamps", { ascending: false });
-  const endDate = new Date("2025-04-20T03:58:52.552Z");
+  const endDate = new Date("2025-04-26T02:59:00.000Z");
 
   console.log(endDate);
-  endDate.setDate(endDate.getDate() + 7);
+  // endDate.setDate(endDate.getDate() + 7);
 
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-[#e0e0e0] font-mono flex flex-col">
@@ -30,7 +30,7 @@ export default async function Home() {
         <div className="flex flex-col gap-4">
           <section className="flex flex-col sticky">
             <h2 className="text-xl mb-4 text-[#0ff] tracking-wider">
-              EL RETO COMIENZA EN:
+              EL RETO TERMINA EN:
             </h2>
             <div className="bg-[#111] border border-[#333] rounded-md p-6 shadow-lg relative overflow-hidden flex-1">
               <div className="absolute inset-0 bg-gradient-to-br from-[#0ff]/5 to-transparent pointer-events-none"></div>
