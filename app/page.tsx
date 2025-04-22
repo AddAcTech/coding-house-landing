@@ -30,7 +30,7 @@ export default async function Home() {
         <div className="flex flex-col gap-4">
           <section className="flex flex-col sticky">
             <h2 className="text-xl mb-4 text-[#0ff] tracking-wider">
-              EL RETO TERMINA EN:
+              THE EVENT ENDS IN:
             </h2>
             <div className="bg-[#111] border border-[#333] rounded-md p-6 shadow-lg relative overflow-hidden flex-1">
               <div className="absolute inset-0 bg-gradient-to-br from-[#0ff]/5 to-transparent pointer-events-none"></div>
@@ -40,7 +40,7 @@ export default async function Home() {
 
           <section className="flex flex-col">
             <h2 className="text-xl mb-4 text-[#f0f] tracking-wider">
-              ACTIVIDAD_RECIENTE
+              LATEST_ACTIVITY
             </h2>
             <div className="bg-[#111] border border-[#333] rounded-md p-6 shadow-lg relative overflow-hidden flex-1">
               <div className="absolute inset-0 bg-gradient-to-br from-[#f0f]/5 to-transparent pointer-events-none"></div>
@@ -57,7 +57,7 @@ export default async function Home() {
 
       <footer className="border-t border-[#333] py-4 text-center text-xs text-[#666]">
         <div className="container mx-auto px-4">
-          <p>SISTEMA_MONITOREO v1.0.7 // EJECUTANDO EN MODO SEGURO</p>
+          <p>MONITOR SYSTEM v1.0.7 // EXECUTING IN SECURE MODE</p>
         </div>
       </footer>
     </main>
